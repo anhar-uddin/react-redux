@@ -1,27 +1,35 @@
-import React from "react";
+import React, { useEffect } from "react";
 import GoogleMapReact from 'google-map-react';
+import { useDispatch } from "react-redux";
+import { getDateWithinBounds } from "../store/actions/data";
 
 export interface Props { data: any; }
 declare const google: any;
 
-class Map extends React.Component<Props, {}> {
+const Map: React.FC<Props> = props => {
 
-    map: any;
-    coordinates: any[] = [];
-    bounds = new google.maps.LatLngBounds();
+    let map: any;
+    let coordinates: any[] = [];
+    let bounds = new google.maps.LatLngBounds();
+    const dispatch = useDispatch();
 
-    constructor(props: any) {
-        super(props);
-        console.log('props', props);
-    }
+    // constructor(props: any) {
+    //     super(props);
+    //     console.log('props', props);
+    //     this.dispatch = useDispatch();
+    // }
 
-    componentDidMount() {
-        this._initMap()
-        this.renderToMaps();
-    }
 
-    _initMap() {
-        this.map = new google.maps.Map(document.getElementById('map'), {
+    useEffect(() => {
+        initMap()
+        renderToMaps();
+        // map.setOptions({ maxZoom: 15 });
+        map.fitBounds(bounds);
+    }, []);
+
+
+    function initMap() {
+        map = new google.maps.Map(document.getElementById('map'), {
             center: { lat: -27.897575560605485, lng: 153.29237339772322 },
             zoom: 10,
             zoomControl: true,
@@ -33,64 +41,68 @@ class Map extends React.Component<Props, {}> {
             mapTypeControl: false,
             mapTypeId: 'roadmap',
         });
-        this.map.addListener('center_changed', () => {
+        map.addListener('center_changed', () => {
             // 3 seconds after the center of the map has changed, pan back to the
             // marker.
             // window.setTimeout(function() {
             //   map.panTo(marker.getPosition());
             // }, 3000);
             // console.log('map changed', this.map.getBounds());
+            // this.dispatch(getDateWithinBounds(this.map.getBounds()));
 
         });
 
-        this.map.addListener('zoom_changed', () => {
+        map.addListener('zoom_changed', () => {
             // 3 seconds after the center of the map has changed, pan back to the
             // marker.
-            // window.setTimeout(function() {
-            //   map.panTo(marker.getPosition());
+            // window.setTimeout(() => {
+            //     console.log('huh');
+
+            // //   map.panTo(marker.getPosition());
             // }, 3000);
-            // console.log('zoom_changed changed', this.map.getBounds());
+            console.log('zoom_changed changed', map.getBounds());
+            // dispatch(getDateWithinBounds(map.getBounds()))
 
         });
     }
 
-    renderToMaps() {
-        this.props.data.forEach((feature: any) => {
+    function renderToMaps() {
+        // map.setOptions({ maxZoom: 15 });
+        // map.fitBounds(bounds);
+        props.data.forEach((feature: any) => {
             if (feature.geometry.type === "MultiPolygon") {
-                this.renderCoordinate(feature.geometry.coordinates[0][0]);
+                renderCoordinate(feature.geometry.coordinates[0][0]);
             } else if (feature.geometry.type === "Polygon") {
-                this.renderCoordinate(feature.geometry.coordinates[0]);
-            } else {
-                alert('option.geojson.type: MultiPolygon & Polygon');
+                renderCoordinate(feature.geometry.coordinates[0]);
             }
 
+            let sortedCord = sortCords(feature.geometry.coordinates[0]);
             let sub_area = new google.maps.Polygon({
-                paths: feature.geometry.coordinates,
+                paths: sortedCord,
                 strokeColor: '#FF0000',
                 strokeOpacity: 0.8,
                 strokeWeight: 2,
                 fillColor: '#FF0000',
                 fillOpacity: 0.35,
-                editable: true
+                editable: false
             });
 
-            sub_area.setMap(this.map);
-            this.map.setOptions({ maxZoom: 15 });
-            this.map.fitBounds(this.bounds);
-
+            sub_area.setMap(map);
         });
     }
 
-    getFormattedCoordinates(paths: any){
-        console.log('');
+    function sortCords(cords: any) {
+        return cords[0].map((ll: any) => {
+            return { lat: ll[1], lng: ll[0] }
+        });
     }
 
-    renderCoordinate(paths: any) {
+    function renderCoordinate(paths: any) {
         let position = 0;
         paths.map((location: any) => {
             if (position % 10 === 0) {
-                this.coordinates.push({ "lat": location[1], "lng": location[0] });
-                this.bounds.extend({ "lat": location[1], "lng": location[0] });
+                coordinates.push({ "lat": location[1], "lng": location[0] });
+                bounds.extend({ "lat": location[1], "lng": location[0] });
             }
             position++
             return true;
@@ -142,13 +154,12 @@ class Map extends React.Component<Props, {}> {
 
     // }
 
-    render() {
-        return (
-            <>
-                <div className="map-conatiner">
-                    <div className="maps" id="map"></div>
+    return (
+        <>
+            <div className="map-conatiner">
+                <div className="maps" id="map"></div>
 
-                    {/* <GoogleMapReact
+                {/* <GoogleMapReact
                         bootstrapURLKeys={{ key: 'AIzaSyDPB-kOrZArLYazR1XTIIiBcVwP7wvMXEk' }}
                         defaultCenter={{
                             lat: 11.0168, lng: 76.9558
@@ -162,11 +173,10 @@ class Map extends React.Component<Props, {}> {
                             color="blue"
                         />
                     </GoogleMapReact> */}
-                </div>
+            </div>
 
-            </>
-        );
-    }
+        </>
+    );
 }
 
 export default Map;

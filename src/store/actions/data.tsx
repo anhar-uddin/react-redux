@@ -20,3 +20,11 @@ export const fetchDataError = (error: any) => {
         }
     };
 };
+
+export const getDateWithinBounds = (bounds: any) => {
+    return {
+        type: 'GET_DATA_WITHIN_BOUNDS', payload: {
+            bounds
+        }
+    };
+};
