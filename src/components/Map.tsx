@@ -28,7 +28,7 @@ const Map: React.FC<Props> = props => {
     }, []);
 
 
-    function initMap() {
+    const initMap = () => {
         map = new google.maps.Map(document.getElementById('map'), {
             center: { lat: -27.897575560605485, lng: 153.29237339772322 },
             zoom: 10,
@@ -66,7 +66,7 @@ const Map: React.FC<Props> = props => {
         });
     }
 
-    function renderToMaps() {
+    const renderToMaps = () => {
         // map.setOptions({ maxZoom: 15 });
         // map.fitBounds(bounds);
         props.data.forEach((feature: any) => {
@@ -91,13 +91,13 @@ const Map: React.FC<Props> = props => {
         });
     }
 
-    function sortCords(cords: any) {
+    const sortCords = (cords: any) => {
         return cords[0].map((ll: any) => {
             return { lat: ll[1], lng: ll[0] }
         });
     }
 
-    function renderCoordinate(paths: any) {
+    const renderCoordinate = (paths: any) => {
         let position = 0;
         paths.map((location: any) => {
             if (position % 10 === 0) {
@@ -109,70 +109,10 @@ const Map: React.FC<Props> = props => {
         });
     }
 
-
-    // renderToMaps() {
-    //     this.props.data.forEach((feature: any) => {
-    //     //   if(coordinates.length > 1){
-    //     //     sub_area = new window.google.maps.Polygon({
-    //     //       paths: coordinates,
-    //     //       strokeColor: color[1],
-    //     //       strokeOpacity: 0.8,
-    //     //       strokeWeight: 2,
-    //     //       fillColor: color[1],
-    //     //       fillOpacity: 0.35,
-    //     //       editable: true
-    //     //     });
-    //     }
-    //     // selectedOptions.forEach((option) => {
-
-    //     //   if(option.geojson.type === "MultiPolygon"){
-    //     //     this.renderCoordinate(option.geojson.coordinates[0][0]);
-    //     //   }else if(option.geojson.type === "Polygon"){
-    //     //     this.renderCoordinate(option.geojson.coordinates[0]);
-    //     //   }else{
-    //     //     alert('option.geojson.type: MultiPolygon & Polygon');
-    //     //   }
-
-    //     //   if(coordinates.length > 1){
-    //     //     sub_area = new window.google.maps.Polygon({
-    //     //       paths: coordinates,
-    //     //       strokeColor: color[1],
-    //     //       strokeOpacity: 0.8,
-    //     //       strokeWeight: 2,
-    //     //       fillColor: color[1],
-    //     //       fillOpacity: 0.35,
-    //     //       editable: true
-    //     //     });
-
-    //     //     sub_area.setMap(map);
-    //     //     map.setOptions({ maxZoom: 15 });
-    //     //     map.fitBounds(bounds);
-
-    //     //     coordinates = [];
-    //     //   }
-    //     // })
-
-    // }
-
     return (
         <>
             <div className="map-conatiner">
                 <div className="maps" id="map"></div>
-
-                {/* <GoogleMapReact
-                        bootstrapURLKeys={{ key: 'AIzaSyDPB-kOrZArLYazR1XTIIiBcVwP7wvMXEk' }}
-                        defaultCenter={{
-                            lat: 11.0168, lng: 76.9558
-                        }}
-                        defaultZoom={13}
-                    >
-                        <Marker
-                            lat={11.0168}
-                            lng={76.9558}
-                            name="My Marker"
-                            color="blue"
-                        />
-                    </GoogleMapReact> */}
             </div>
 
         </>
