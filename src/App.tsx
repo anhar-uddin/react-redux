@@ -4,11 +4,10 @@ import Map from "./components/Map";
 import SizeChart from './components/SizeChart';
 import ConstructionMaterialChart from './components/ConstructionMaterialChart';
 import { fetchData, fetchDataSuccess } from './store/actions/data';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector, connect } from 'react-redux';
 
-function App() {
+function App(props: { data: any }) {
   const dispatch = useDispatch();
-  const state: any = useSelector(state => state);
 
   useEffect(() => {
     getData();
@@ -24,7 +23,7 @@ function App() {
 
   function handleClick(e: any) {
     e.preventDefault();
-    console.log('The link was clicked.', state.data);
+    console.log('The link was clicked.', props.data);
   }
 
 
@@ -35,19 +34,23 @@ function App() {
           Click me
         </a> */}
         <div className="col-12 map">
-          {state.data.filteredFeatures.length ? <Map data={state.data.filteredFeatures} /> : ''}
+          {props.data.filteredFeatures.length ? <Map data={props.data.filteredFeatures} /> : ''}
         </div>
       </div>
       <div className="row">
         <div className="visuals-block col-6 map">
-          <ConstructionMaterialChart />
+          {props.data.filteredFeatures.length ? <ConstructionMaterialChart data={props.data.filteredFeatures} /> : ''}
         </div>
         <div className="visuals-block col-6 map">
-          <SizeChart />
+          {props.data.filteredFeatures.length ? <SizeChart data={props.data.filteredFeatures} /> : ''}
         </div>
       </div>
     </div>
   );
 }
 
-export default App;
+function mapStateToProps(state: any) {
+  return { data: state.data }
+}
+
+export default connect(mapStateToProps)(App);

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import GoogleMapReact from 'google-map-react';
 import { useDispatch } from "react-redux";
 import { getDateWithinBounds } from "../store/actions/data";
@@ -8,28 +8,26 @@ declare const google: any;
 
 const Map: React.FC<Props> = props => {
 
-    let map: any;
+    // let map: any;
     let coordinates: any[] = [];
     let bounds = new google.maps.LatLngBounds();
     const dispatch = useDispatch();
-
-    // constructor(props: any) {
-    //     super(props);
-    //     console.log('props', props);
-    //     this.dispatch = useDispatch();
-    // }
-
+    const subA: any = [];
+    const [subAreas, setSubAreas] = useState(subA);
+    const [map, setMap] = useState(0);
 
     useEffect(() => {
         initMap()
-        renderToMaps();
-        // map.setOptions({ maxZoom: 15 });
-        map.fitBounds(bounds);
     }, []);
+
+    useEffect(() => {
+        removeAllAreas();
+        renderToMaps(map);
+    }, [props.data]);
 
 
     const initMap = () => {
-        map = new google.maps.Map(document.getElementById('map'), {
+        let newMap = new google.maps.Map(document.getElementById('map'), {
             center: { lat: -27.897575560605485, lng: 153.29237339772322 },
             zoom: 10,
             zoomControl: true,
@@ -41,34 +39,27 @@ const Map: React.FC<Props> = props => {
             mapTypeControl: false,
             mapTypeId: 'roadmap',
         });
-        map.addListener('center_changed', () => {
-            // 3 seconds after the center of the map has changed, pan back to the
-            // marker.
-            // window.setTimeout(function() {
+
+        newMap.addListener('center_changed', () => {
+  
+        });
+
+        newMap.addListener('zoom_changed', () => {
+            let bounds = {
+                NE: { long: newMap.getBounds().Ua.j, lat: newMap.getBounds().Za.j }, SW: { long: newMap.getBounds().Ua.i, lat: newMap.getBounds().Za.i }
+            }
+            dispatch(getDateWithinBounds(bounds))
+
+        });
+        setMap(newMap)
+        window.setTimeout(() => {
+            renderToMaps(newMap)
             //   map.panTo(marker.getPosition());
-            // }, 3000);
-            // console.log('map changed', this.map.getBounds());
-            // this.dispatch(getDateWithinBounds(this.map.getBounds()));
-
-        });
-
-        map.addListener('zoom_changed', () => {
-            // 3 seconds after the center of the map has changed, pan back to the
-            // marker.
-            // window.setTimeout(() => {
-            //     console.log('huh');
-
-            // //   map.panTo(marker.getPosition());
-            // }, 3000);
-            console.log('zoom_changed changed', map.getBounds());
-            // dispatch(getDateWithinBounds(map.getBounds()))
-
-        });
+        }, 1000);
     }
 
-    const renderToMaps = () => {
-        // map.setOptions({ maxZoom: 15 });
-        // map.fitBounds(bounds);
+    const renderToMaps = (m: any) => {
+        let tempArray: any = [];
         props.data.forEach((feature: any) => {
             if (feature.geometry.type === "MultiPolygon") {
                 renderCoordinate(feature.geometry.coordinates[0][0]);
@@ -86,8 +77,16 @@ const Map: React.FC<Props> = props => {
                 fillOpacity: 0.35,
                 editable: false
             });
+            tempArray.push(sub_area)
+            setSubAreas(tempArray);
+            sub_area.setMap(m);
+        });
 
-            sub_area.setMap(map);
+    }
+
+    const removeAllAreas = () => {
+        subAreas.forEach((subArea: any) => {
+            subArea.setMap(null)
         });
     }
 
