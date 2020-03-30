@@ -1,6 +1,6 @@
 import { AreaSize } from "../../lib/types";
 
-const INITIAL_STATE = {
+export const INITIAL_STATE = {
     features: [],
     isFetching: false,
     error: undefined,
@@ -13,7 +13,7 @@ const INITIAL_STATE = {
     material: 'all'
 };
 
-const dataReducer = (state = INITIAL_STATE, action: any) => {
+export const dataReducer = (state = INITIAL_STATE, action: any) => {
     switch (action.type) {
         case 'FETCH_DATA':
             return state;

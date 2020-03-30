@@ -49,6 +49,8 @@ const Map: React.FC<Props> = props => {
             let bounds = {
                 NE: { long: newMap.getBounds().Ua.j, lat: newMap.getBounds().Za.j }, SW: { long: newMap.getBounds().Ua.i, lat: newMap.getBounds().Za.i }
             }
+            console.log('getDateWithinBounds',JSON.stringify(bounds) );
+            
             dispatch(getDateWithinBounds(bounds))
         });
 
