@@ -21,6 +21,14 @@ function App(props: { data: any }) {
       })
   }
 
+  function outOfBoundsMessage() {
+    return <div className="row">
+      <div className="col-12 text-center">
+        <p>No data is available for area, try <a href="#" onClick={e => dispatch(resetData('map'))}>resetting</a> the map</p>
+      </div>
+    </div>
+  }
+
   return (
     <div className="container">
       <div className="row">
@@ -28,8 +36,11 @@ function App(props: { data: any }) {
           <div className="card shadow mt-4">
             <div className="card-header py-3 d-flex flex-row align-items-center justify-content-between">
               <h6 className="m-0 font-weight-bold text-primary">Map</h6>
+              <a href="#" onClick={e => dispatch(resetData('map'))} className="btn btn-sm btn-primary shadow-sm">Reset Map</a>
             </div>
-            {props.data.filteredFeatures.length ? <Map data={props.data.filteredFeatures} /> : ''}
+            <div className="map-conatiner">
+              {props.data.filteredFeatures.length ? <Map data={props.data.filteredFeatures} features={props.data.features} /> : outOfBoundsMessage()}
+            </div>
           </div>
         </div>
       </div>

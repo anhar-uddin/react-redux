@@ -57,6 +57,7 @@ const dataReducer = (state = INITIAL_STATE, action: any) => {
                         ...state,
                         isFetching: false,
                         error: undefined,
+                        features: [...state.features],
                         filteredFeatures: state.features,
                         featuresWithinBounds: [],
                         mapBounds: undefined,

@@ -19,7 +19,6 @@ const SizeChart: React.FC<Props> = props => {
         let feature = pieData[index];
         let areaSize: AreaSize = { minSize: feature.minSize, maxSize: feature.maxSize }
         dispatch(setAreaSize(areaSize))
-        // SetActiveIndex(index)
     }
 
     useEffect(() => {
@@ -56,17 +55,35 @@ const SizeChart: React.FC<Props> = props => {
 
     return (
         <>
-            <PieChart width={400} height={400}>
-                <Pie
-                    onClick={handleClick}
-                    dataKey='value'
-                    isAnimationActive={false} data={pieData} cx={200} cy={200} innerRadius={40} outerRadius={60} fill="#8884d8" label
-                >
-                    {
-                        pieData.map((entry, index) => <Cell cursor="pointer" key={`pie-cell-${index}`} fill={index === activeIndex ? 'black' : COLORS[index % COLORS.length]} />)
+            <div className="text-center">
+                <PieChart width={525} height={300}>
+                    <Pie
+                        onClick={handleClick}
+                        dataKey='value'
+                        isAnimationActive={false} data={pieData} innerRadius={40} outerRadius={60} fill="#8884d8" label
+                    >
+                        {
+                            pieData.map((entry, index) => <Cell cursor="pointer" key={`pie-cell-${index}`} fill={index === activeIndex ? 'black' : COLORS[index]} />)
+                        }
+                    </Pie>
+                </PieChart>
+                <div className="my-4 text-center small">
+                    {pieData.map((entry, index) => <span style={{ color: COLORS[index] }} key={`pie-label-${index}`} className="mr-2">
+                        <i className="fas fa-circle text-primary"></i> {entry.name}
+                    </span>)
                     }
-                </Pie>
-            </PieChart>
+                    {/* <span className="mr-2">
+                        <i className="fas fa-circle text-primary"></i> Direct
+                    </span>
+                    <span className="mr-2">
+                        <i className="fas fa-circle text-success"></i> Social
+                    </span>
+                    <span className="mr-2">
+                        <i className="fas fa-circle text-info"></i> Referral
+                    </span> */}
+                </div>
+            </div>
+
         </>
     );
 }

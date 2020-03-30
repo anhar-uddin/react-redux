@@ -3,7 +3,7 @@ import GoogleMapReact from 'google-map-react';
 import { useDispatch } from "react-redux";
 import { getDateWithinBounds } from "../store/actions/data";
 
-export interface Props { data: any; }
+export interface Props { data: any; features: any }
 declare const google: any;
 
 const Map: React.FC<Props> = props => {
@@ -19,6 +19,10 @@ const Map: React.FC<Props> = props => {
     useEffect(() => {
         initMap()
     }, []);
+
+    useEffect(() => {
+        initMap()
+    }, [props.features]);
 
     useEffect(() => {
         removeAllAreas();
@@ -113,9 +117,7 @@ const Map: React.FC<Props> = props => {
 
     return (
         <>
-            <div className="map-conatiner">
                 <div className="maps" id="map"></div>
-            </div>
 
         </>
     );
