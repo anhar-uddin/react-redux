@@ -13,15 +13,14 @@ export function App(props: { data: any }) {
     getData();
   }, []);
 
-  function getData() {
+  const getData = () => {
     fetch('https://raw.githubusercontent.com/JRGranell/javascript-challenge/master/data/boat_ramps.geojson')
       .then(response => response.json())
       .then(data => {
         dispatch(fetchDataSuccess(data.features))
       })
   }
-
-  function outOfBoundsMessage() {
+  const outOfBoundsMessage = () => {
     return <div className="row">
       <div className="col-12 text-center">
         <p>No data is available for area, try <a href="#" onClick={e => dispatch(resetData('map'))}>resetting</a> the map</p>
