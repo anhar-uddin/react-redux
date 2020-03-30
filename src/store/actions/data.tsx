@@ -23,7 +23,7 @@ export const fetchDataError = (error: any) => {
     };
 };
 
-export const getDateWithinBounds = (bounds: any) => {
+export const getDataWithinBounds = (bounds: any) => {
     return {
         type: 'GET_DATA_WITHIN_BOUNDS', payload: {
             bounds
@@ -31,22 +31,8 @@ export const getDateWithinBounds = (bounds: any) => {
     };
 };
 
-export const getDateAreaSize = (size: AreaSize) => {
-    return {
-        type: 'GET_DATA_AREA_SIZE', payload: {
-            size
-        }
-    };
-};
-
-export const getFilteredRamps = () => {
-    return {
-        type: 'GET_FILTERED_RAMPS'
-    };
-};
 
 export const setMaterial = (material: string) => {
-    console.log('material', material);
     return {
         type: 'SET_MATERIAL',
         payload: {

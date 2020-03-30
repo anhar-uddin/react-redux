@@ -5,7 +5,6 @@ export const INITIAL_STATE = {
     isFetching: false,
     error: undefined,
     filteredFeatures: [],
-    featuresWithinBounds: [],
     mapBounds: undefined,
     areaSize: {
         minSize: 0, maxSize: 0
@@ -29,7 +28,6 @@ export const dataReducer = (state = INITIAL_STATE, action: any) => {
         case 'GET_DATA_WITHIN_BOUNDS':
             return {
                 ...state,
-                featuresWithinBounds: featuresWithinMapBounds(state.features, action.payload.bounds),
                 filteredFeatures: filterRamps(state.features, state.areaSize, state.material, action.payload.bounds),
                 mapBounds: action.payload.bounds
             }
@@ -59,7 +57,6 @@ export const dataReducer = (state = INITIAL_STATE, action: any) => {
                         error: undefined,
                         features: [...state.features],
                         filteredFeatures: state.features,
-                        featuresWithinBounds: [],
                         mapBounds: undefined,
                         areaSize: {
                             minSize: 0, maxSize: 0
@@ -125,17 +122,6 @@ const isAreaSize = (feature: any, areaSize: AreaSize) => {
         return true;
     }
     return false
-}
-
-const featuresWithinMapBounds = (features: any, bounds: any) => {
-    return features.filter((feature: any) => {
-        // console.log('feature', feature);
-        let point = {
-            long: feature.geometry.coordinates[0][0][0][0],
-            lat: feature.geometry.coordinates[0][0][0][1]
-        }
-        return isInBound(point, bounds);
-    });
 }
 
 function isInBound(point: { long: number; lat: number; }, bounds: { NE: { long: number; lat: number; }; SW: { long: number; lat: number; }; }) {

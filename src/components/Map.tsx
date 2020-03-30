@@ -1,19 +1,15 @@
 import React, { useEffect, useState } from "react";
-import GoogleMapReact from 'google-map-react';
 import { useDispatch } from "react-redux";
-import { getDateWithinBounds } from "../store/actions/data";
+import { getDataWithinBounds } from "../store/actions/data";
 
 export interface Props { data: any; features: any }
 declare const google: any;
 
 const Map: React.FC<Props> = props => {
 
-    // let map: any;
-    let coordinates: any[] = [];
-    let bounds = new google.maps.LatLngBounds();
     const dispatch = useDispatch();
-    const subA: any = [];
-    const [subAreas, setSubAreas] = useState(subA);
+    const initAreas: any = [];
+    const [subAreas, setSubAreas] = useState(initAreas);
     const [map, setMap] = useState(0);
 
     useEffect(() => {
@@ -48,17 +44,15 @@ const Map: React.FC<Props> = props => {
         newMap.addListener('center_changed', () => {
             let bounds = {
                 NE: { long: newMap.getBounds().Ua.j, lat: newMap.getBounds().Za.j }, SW: { long: newMap.getBounds().Ua.i, lat: newMap.getBounds().Za.i }
-            }
-            console.log('getDateWithinBounds',JSON.stringify(bounds) );
-            
-            dispatch(getDateWithinBounds(bounds))
+            }            
+            dispatch(getDataWithinBounds(bounds))
         });
 
         newMap.addListener('zoom_changed', () => {
             let bounds = {
                 NE: { long: newMap.getBounds().Ua.j, lat: newMap.getBounds().Za.j }, SW: { long: newMap.getBounds().Ua.i, lat: newMap.getBounds().Za.i }
             }
-            dispatch(getDateWithinBounds(bounds))
+            dispatch(getDataWithinBounds(bounds))
 
         });
         setMap(newMap)
@@ -70,12 +64,7 @@ const Map: React.FC<Props> = props => {
     const renderToMaps = (m: any) => {
         let tempArray: any = [];
         props.data.forEach((feature: any) => {
-            if (feature.geometry.type === "MultiPolygon") {
-                renderCoordinate(feature.geometry.coordinates[0][0]);
-            } else if (feature.geometry.type === "Polygon") {
-                renderCoordinate(feature.geometry.coordinates[0]);
-            }
-
+      
             let sortedCord = sortCords(feature.geometry.coordinates[0]);
             let sub_area = new google.maps.Polygon({
                 paths: sortedCord,
@@ -102,18 +91,6 @@ const Map: React.FC<Props> = props => {
     const sortCords = (cords: any) => {
         return cords[0].map((ll: any) => {
             return { lat: ll[1], lng: ll[0] }
-        });
-    }
-
-    const renderCoordinate = (paths: any) => {
-        let position = 0;
-        paths.map((location: any) => {
-            if (position % 10 === 0) {
-                coordinates.push({ "lat": location[1], "lng": location[0] });
-                bounds.extend({ "lat": location[1], "lng": location[0] });
-            }
-            position++
-            return true;
         });
     }
 

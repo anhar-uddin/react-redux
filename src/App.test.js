@@ -7,9 +7,8 @@ import { mount } from 'enzyme';
 import { mockData } from './lib/mock';
 import allReducer from './store/reducers/index'
 import { fetchDataSuccess } from './store/actions/data';
-import { getDateWithinBounds } from './store/actions/data';
+import { getDataWithinBounds } from './store/actions/data';
 import { setMaterial } from './store/actions/data';
-import configureMockStore from 'redux-mock-store'
 import { dataReducer } from './store/reducers/dataReducer';
 
 
@@ -57,7 +56,6 @@ test('Should return features within map bounds', () => {
     isFetching: false,
     error: undefined,
     filteredFeatures: mockData.features,
-    featuresWithinBounds: [],
     mapBounds: undefined,
     areaSize: {
       minSize: 0, maxSize: 0
@@ -66,7 +64,7 @@ test('Should return features within map bounds', () => {
   }
   let mockBounds = { "NE": { "long": 153.92958042897322, "lat": -27.725093888567443 }, "SW": { "long": 152.65516636647322, "lat": -28.11339720230221 } };
 
-  expect(dataReducer(state, getDateWithinBounds(mockBounds)).filteredFeatures.length).toEqual(
+  expect(dataReducer(state, getDataWithinBounds(mockBounds)).filteredFeatures.length).toEqual(
     93
   )
 });
@@ -77,7 +75,6 @@ test('Should return features with material = Gravel', () => {
     isFetching: false,
     error: undefined,
     filteredFeatures: mockData.features,
-    featuresWithinBounds: [],
     mapBounds: undefined,
     areaSize: {
       minSize: 0, maxSize: 0

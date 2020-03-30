@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { PieChart, Pie, Sector, Cell, PolarAngleAxis } from 'recharts';
-import { connect, useDispatch } from "react-redux";
-import { getDateAreaSize, setAreaSize } from "../store/actions/data";
+import { PieChart, Pie, Cell } from 'recharts';
+import { useDispatch } from "react-redux";
+import { setAreaSize } from "../store/actions/data";
 import { AreaSize } from '../lib/types';
 
 export interface Props { data: any }
@@ -14,19 +14,16 @@ const SizeChart: React.FC<Props> = props => {
     const [pieData, setPieData] = useState(data);
     const dispatch = useDispatch();
 
+    useEffect(() => {
+        data = formatData(props.data);
+        setPieData([...data])
+    }, [props.data]);
+
     const handleClick = (data: any, index: any) => {
-        console.log('data', index);
         let feature = pieData[index];
         let areaSize: AreaSize = { minSize: feature.minSize, maxSize: feature.maxSize }
         dispatch(setAreaSize(areaSize))
     }
-
-    useEffect(() => {
-        data = formatData(props.data);
-        console.log('data', data);
-
-        setPieData([...data])
-    }, [props.data]);
 
     const formatData = (features: any) => {
         let formattedData: any[] = [];
@@ -72,15 +69,6 @@ const SizeChart: React.FC<Props> = props => {
                         <i className="fas fa-circle text-primary"></i> {entry.name}
                     </span>)
                     }
-                    {/* <span className="mr-2">
-                        <i className="fas fa-circle text-primary"></i> Direct
-                    </span>
-                    <span className="mr-2">
-                        <i className="fas fa-circle text-success"></i> Social
-                    </span>
-                    <span className="mr-2">
-                        <i className="fas fa-circle text-info"></i> Referral
-                    </span> */}
                 </div>
             </div>
 

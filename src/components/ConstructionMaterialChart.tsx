@@ -14,18 +14,15 @@ const ConstructionMaterialChart: React.FC<Props> = props => {
     const [activeIndex, SetActiveIndex] = useState(null);
     const [barData, setBarData] = useState(data);
 
-    const handleClick = (data: any, index: any) => {
-
-        console.log('index', index);
-        let materialType = barData[index].name;
-        dispatch(setMaterial(materialType))
-        // SetActiveIndex(index)
-    }
-
     useEffect(() => {
         data = formatData(props.data);
         setBarData([...data])
     }, [props.data]);
+
+    const handleClick = (data: any, index: any) => {
+        let materialType = barData[index].name;
+        dispatch(setMaterial(materialType))
+    }
 
     const formatData = (features: any) => {
         let formattedData: any[] = [];
@@ -39,8 +36,6 @@ const ConstructionMaterialChart: React.FC<Props> = props => {
         });
         return formattedData;
     }
-
-
 
     return (
         <>
