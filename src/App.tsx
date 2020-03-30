@@ -3,7 +3,7 @@ import './App.scss';
 import Map from "./components/Map";
 import SizeChart from './components/SizeChart';
 import ConstructionMaterialChart from './components/ConstructionMaterialChart';
-import { fetchData, fetchDataSuccess } from './store/actions/data';
+import { fetchData, fetchDataSuccess, resetData } from './store/actions/data';
 import { useDispatch, useSelector, connect } from 'react-redux';
 
 function App(props: { data: any }) {
@@ -21,22 +21,13 @@ function App(props: { data: any }) {
       })
   }
 
-  function handleClick(e: any) {
-    e.preventDefault();
-    console.log('The link was clicked.', props.data);
-  }
-
-
   return (
     <div className="container">
       <div className="row">
-        {/* <a href="#" onClick={handleClick}>
-          Click me
-        </a> */}
         <div className="col-12 map">
           <div className="card shadow mt-4">
             <div className="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-              <h6 className="m-0 font-weight-bold text-primary">Material Type</h6>
+              <h6 className="m-0 font-weight-bold text-primary">Map</h6>
             </div>
             {props.data.filteredFeatures.length ? <Map data={props.data.filteredFeatures} /> : ''}
           </div>
@@ -47,16 +38,18 @@ function App(props: { data: any }) {
           <div className="card shadow mt-4">
             <div className="card-header py-3 d-flex flex-row align-items-center justify-content-between">
               <h6 className="m-0 font-weight-bold text-primary">Material Type</h6>
+              {props.data.material !== 'all' ? <a href="#" onClick={e => dispatch(resetData('material'))} className="btn btn-sm btn-primary shadow-sm">Reset Data</a> : ''}
             </div>
-            {props.data.featuresWithinBounds.length ? <ConstructionMaterialChart data={props.data.featuresWithinBounds} /> : ''}
+            {props.data.filteredFeatures.length ? <ConstructionMaterialChart data={props.data.filteredFeatures} /> : ''}
           </div>
         </div>
         <div className="visuals-block col-6 map">
           <div className="card shadow mt-4">
             <div className="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-              <h6 className="m-0 font-weight-bold text-primary">Material Type</h6>
+              <h6 className="m-0 font-weight-bold text-primary">Area Size</h6>
+              {props.data.areaSize.maxSize > 0 && props.data.areaSize.minSize > 0 ? <a href="#" onClick={e => dispatch(resetData('area_size'))} className="btn btn-sm btn-primary shadow-sm">Reset Data</a> : ''}
             </div>
-            {props.data.featuresWithinBounds.length ? <SizeChart data={props.data.featuresWithinBounds} /> : ''}
+            {props.data.filteredFeatures.length ? <SizeChart data={props.data.filteredFeatures} /> : ''}
           </div>
         </div>
       </div>

@@ -27,8 +27,9 @@ const Map: React.FC<Props> = props => {
 
 
     const initMap = () => {
+        let initCenter = { lat: props.data[0].geometry.coordinates[0][0][0][1], lng: props.data[0].geometry.coordinates[0][0][0][0] };
         let newMap = new google.maps.Map(document.getElementById('map'), {
-            center: { lat: -27.897575560605485, lng: 153.29237339772322 },
+            center: initCenter,
             zoom: 10,
             zoomControl: true,
             zoomControlOptions: {
@@ -57,7 +58,6 @@ const Map: React.FC<Props> = props => {
         setMap(newMap)
         window.setTimeout(() => {
             renderToMaps(newMap)
-            //   map.panTo(marker.getPosition());
         }, 1000);
     }
 

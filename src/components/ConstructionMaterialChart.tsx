@@ -19,7 +19,7 @@ const ConstructionMaterialChart: React.FC<Props> = props => {
         console.log('index', index);
         let materialType = barData[index].name;
         dispatch(setMaterial(materialType))
-        SetActiveIndex(index)
+        // SetActiveIndex(index)
     }
 
     useEffect(() => {
@@ -51,7 +51,7 @@ const ConstructionMaterialChart: React.FC<Props> = props => {
                 <Bar dataKey='amount' onClick={handleClick}>
                     {
                         barData.map((entry: any, index: any) => (
-                            <Cell cursor="pointer" fill={index === activeIndex ? 'white' : 'blue'} key={`cell-${index}`} />
+                            <Cell cursor="pointer" fill={index === activeIndex ? '#4e73df' : '#4e73df'} key={`cell-${index}`} />
                         ))
                     }
                 </Bar>

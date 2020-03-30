@@ -63,3 +63,12 @@ export const setAreaSize = (areaSize: AreaSize) => {
         }
     };
 };
+
+export const resetData = (type: string) => {
+    return {
+        type: 'RESET_DATA',
+        payload: {
+            type
+        }
+    };
+};

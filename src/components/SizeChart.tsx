@@ -19,7 +19,7 @@ const SizeChart: React.FC<Props> = props => {
         let feature = pieData[index];
         let areaSize: AreaSize = { minSize: feature.minSize, maxSize: feature.maxSize }
         dispatch(setAreaSize(areaSize))
-        SetActiveIndex(index)
+        // SetActiveIndex(index)
     }
 
     useEffect(() => {
