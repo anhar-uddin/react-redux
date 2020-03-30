@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { BarChart, Bar, Cell, XAxis, YAxis, Tooltip } from 'recharts';
+import { useDispatch } from "react-redux";
+import { setMaterial } from "../store/actions/data";
 
 
 
@@ -8,10 +10,15 @@ export interface Props { data: any }
 const ConstructionMaterialChart: React.FC<Props> = props => {
 
     let data: any[] = [];
+    const dispatch = useDispatch();
+    const [activeIndex, SetActiveIndex] = useState(null);
+    const [barData, setBarData] = useState(data);
 
     const handleClick = (data: any, index: any) => {
-        console.log('data', data);
+
         console.log('index', index);
+        let materialType = barData[index].name;
+        dispatch(setMaterial(materialType))
         SetActiveIndex(index)
     }
 
@@ -33,12 +40,11 @@ const ConstructionMaterialChart: React.FC<Props> = props => {
         return formattedData;
     }
 
-    const [activeIndex, SetActiveIndex] = useState(null);
-    const [barData, setBarData] = useState(data);
+
 
     return (
         <>
-            <BarChart width={600} height={300} data={barData}>
+            <BarChart width={450} height={300} data={barData}>
                 <XAxis dataKey="name" />
                 <YAxis />
                 <Tooltip />

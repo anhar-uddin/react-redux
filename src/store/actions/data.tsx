@@ -1,3 +1,5 @@
+import { AreaSize } from '../../lib/types';
+
 
 export const fetchData = () => {
     return {
@@ -29,11 +31,35 @@ export const getDateWithinBounds = (bounds: any) => {
     };
 };
 
-export const getDateAreaSize = (minSize: number, maxSize: number) => {
+export const getDateAreaSize = (size: AreaSize) => {
     return {
         type: 'GET_DATA_AREA_SIZE', payload: {
-            minSize,
-            maxSize
+            size
+        }
+    };
+};
+
+export const getFilteredRamps = () => {
+    return {
+        type: 'GET_FILTERED_RAMPS'
+    };
+};
+
+export const setMaterial = (material: string) => {
+    console.log('material', material);
+    return {
+        type: 'SET_MATERIAL',
+        payload: {
+            material
+        }
+    };
+};
+
+export const setAreaSize = (areaSize: AreaSize) => {
+    return {
+        type: 'SET_AREA_SIZE',
+        payload: {
+            areaSize
         }
     };
 };

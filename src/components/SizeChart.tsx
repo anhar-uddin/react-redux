@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { PieChart, Pie, Sector, Cell, PolarAngleAxis } from 'recharts';
 import { connect, useDispatch } from "react-redux";
-import { getDateAreaSize } from "../store/actions/data";
+import { getDateAreaSize, setAreaSize } from "../store/actions/data";
+import { AreaSize } from '../lib/types';
 
 export interface Props { data: any }
 
@@ -9,14 +10,15 @@ export interface Props { data: any }
 const SizeChart: React.FC<Props> = props => {
     let data: any[] = [];
     const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
-    const [activeIndex, SetActiveIndex] = useState(0);
+    const [activeIndex, SetActiveIndex] = useState(null);
     const [pieData, setPieData] = useState(data);
     const dispatch = useDispatch();
 
     const handleClick = (data: any, index: any) => {
         console.log('data', index);
         let feature = pieData[index];
-        dispatch(getDateAreaSize(feature.minSize, feature.maxSize))
+        let areaSize: AreaSize = { minSize: feature.minSize, maxSize: feature.maxSize }
+        dispatch(setAreaSize(areaSize))
         SetActiveIndex(index)
     }
 
@@ -61,7 +63,7 @@ const SizeChart: React.FC<Props> = props => {
                     isAnimationActive={false} data={pieData} cx={200} cy={200} innerRadius={40} outerRadius={60} fill="#8884d8" label
                 >
                     {
-                        pieData.map((entry, index) => <Cell cursor="pointer" key={`pie-cell-${index}`} fill={index === activeIndex ? '#82ca9d' : COLORS[index % COLORS.length]} />)
+                        pieData.map((entry, index) => <Cell cursor="pointer" key={`pie-cell-${index}`} fill={index === activeIndex ? 'black' : COLORS[index % COLORS.length]} />)
                     }
                 </Pie>
             </PieChart>

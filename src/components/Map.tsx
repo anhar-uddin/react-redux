@@ -41,7 +41,10 @@ const Map: React.FC<Props> = props => {
         });
 
         newMap.addListener('center_changed', () => {
-  
+            let bounds = {
+                NE: { long: newMap.getBounds().Ua.j, lat: newMap.getBounds().Za.j }, SW: { long: newMap.getBounds().Ua.i, lat: newMap.getBounds().Za.i }
+            }
+            dispatch(getDateWithinBounds(bounds))
         });
 
         newMap.addListener('zoom_changed', () => {

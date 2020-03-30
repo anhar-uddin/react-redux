@@ -1,9 +1,16 @@
+import { AreaSize } from "../../lib/types";
+
 const INITIAL_STATE = {
     features: [],
     isFetching: false,
     error: undefined,
     filteredFeatures: [],
-    mapBounds: undefined
+    featuresWithinBounds: [],
+    mapBounds: undefined,
+    areaSize: {
+        minSize: 0, maxSize: 0
+    },
+    material: 'all'
 };
 
 const dataReducer = (state = INITIAL_STATE, action: any) => {
@@ -14,20 +21,33 @@ const dataReducer = (state = INITIAL_STATE, action: any) => {
             return {
                 ...state,
                 features: action.payload.data,
-                filteredFeatures: action.payload.data
+                filteredFeatures: action.payload.data,
+                featuresWithinBounds: action.payload.data
             };
         case 'FETCH_DATA_ERROR':
             return state;
         case 'GET_DATA_WITHIN_BOUNDS':
             return {
                 ...state,
-                filteredFeatures: featuresWithinMapBounds(state.features, action.payload.bounds),
+                featuresWithinBounds: featuresWithinMapBounds(state.features, action.payload.bounds),
                 mapBounds: action.payload.bounds
             }
-        case 'GET_DATA_AREA_SIZE':
+        case 'GET_FILTERED_RAMPS':
             return {
                 ...state,
-                filteredFeatures: featuresWithAreaSize(state.features, state.mapBounds, action.payload.minSize, action.payload.maxSize)
+                size: action.payload.areaAize
+            }
+        case 'SET_AREA_SIZE':
+            return {
+                ...state,
+                filteredFeatures: filterRamps(state.features, action.payload.areaSize, state.material),
+                areaSize: action.payload.areaSize
+            }
+        case 'SET_MATERIAL':
+            return {
+                ...state,
+                filteredFeatures: filterRamps(state.features, state.areaSize, action.payload.material),
+                material: action.payload.material
             }
         default:
             return state;
@@ -36,23 +56,33 @@ const dataReducer = (state = INITIAL_STATE, action: any) => {
 
 export default dataReducer;
 
-
-const featuresWithAreaSize = (features: any, mapBounds: any, minSize: number, maxSize: number) => {
+const filterRamps = (features: any, areaSize: AreaSize, material: string) => {
     return features.filter((feature: any) => {
-        let featureArea = feature.properties.area_;
-        let point = {
-            long: feature.geometry.coordinates[0][0][0][0],
-            lat: feature.geometry.coordinates[0][0][0][1]
+        if (areaSize.maxSize > 0 && areaSize.minSize > 0 && !isAreaSize(feature, areaSize)) {
+            return false
         }
-        if (featureArea >= minSize && featureArea <= maxSize) {
-            if (mapBounds) {
-                return isInBound(point, mapBounds)
-            } else {
-                return true;
-            }
+
+        if (material !== 'all' && material !== feature.properties.material) {
+            return false
         }
-        return false
+
+        if (material !== 'all' && material !== feature.properties.material) {
+            return false
+        }
+        return true
     });
+}
+
+const isAreaSize = (feature: any, areaSize: AreaSize) => {
+    let featureArea = feature.properties.area_;
+    let point = {
+        long: feature.geometry.coordinates[0][0][0][0],
+        lat: feature.geometry.coordinates[0][0][0][1]
+    }
+    if (featureArea >= areaSize.minSize && featureArea <= areaSize.maxSize) {
+        return true;
+    }
+    return false
 }
 
 const featuresWithinMapBounds = (features: any, bounds: any) => {
