@@ -57,7 +57,7 @@ export function App(props: { data: any }) {
           <div className="card shadow mt-4">
             <div className="card-header py-3 d-flex flex-row align-items-center justify-content-between">
               <h6 data-test-id="area-size-heading-text" className="m-0 font-weight-bold text-primary">Area Size</h6>
-              {props.data.areaSize.maxSize > 0 && props.data.areaSize.minSize > 0 ? <a href="#" onClick={e => dispatch(resetData('area_size'))} className="btn btn-sm btn-primary shadow-sm">Reset Data</a> : ''}
+              {props.data.areaSize.maxSize !== 1000? <a href="#" onClick={e => dispatch(resetData('area_size'))} className="btn btn-sm btn-primary shadow-sm">Reset Data</a> : ''}
             </div>
             {props.data.filteredFeatures.length ? <SizeChart data={props.data.filteredFeatures} /> : ''}
           </div>

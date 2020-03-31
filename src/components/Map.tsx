@@ -64,7 +64,7 @@ const Map: React.FC<Props> = props => {
     const renderToMaps = (m: any) => {
         let tempArray: any = [];
         props.data.forEach((feature: any) => {
-      
+    
             let sortedCord = sortCords(feature.geometry.coordinates[0]);
             let sub_area = new google.maps.Polygon({
                 paths: sortedCord,

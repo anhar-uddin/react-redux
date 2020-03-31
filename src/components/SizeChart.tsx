@@ -3,6 +3,7 @@ import { PieChart, Pie, Cell } from 'recharts';
 import { useDispatch } from "react-redux";
 import { setAreaSize } from "../store/actions/data";
 import { AreaSize } from '../lib/types';
+import { log } from "util";
 
 export interface Props { data: any }
 

@@ -7,7 +7,7 @@ export const INITIAL_STATE = {
     filteredFeatures: [],
     mapBounds: undefined,
     areaSize: {
-        minSize: 0, maxSize: 0
+        minSize: 0, maxSize: 1000
     },
     material: 'all'
 };
@@ -36,7 +36,7 @@ export const dataReducer = (state = INITIAL_STATE, action: any) => {
                 ...state,
                 size: action.payload.areaAize
             }
-        case 'SET_AREA_SIZE':
+        case 'SET_AREA_SIZE':            
             return {
                 ...state,
                 filteredFeatures: filterRamps(state.features, action.payload.areaSize, state.material, state.mapBounds),
@@ -59,7 +59,7 @@ export const dataReducer = (state = INITIAL_STATE, action: any) => {
                         filteredFeatures: state.features,
                         mapBounds: undefined,
                         areaSize: {
-                            minSize: 0, maxSize: 0
+                            minSize: 0, maxSize: 1000
                         },
                         material: 'all'
                     }
@@ -77,10 +77,10 @@ export const dataReducer = (state = INITIAL_STATE, action: any) => {
                         isFetching: false,
                         error: undefined,
                         filteredFeatures: filterRamps(state.features, {
-                            minSize: 0, maxSize: 0
+                            minSize: 0, maxSize: 1000
                         }, state.material, state.mapBounds),
                         areaSize: {
-                            minSize: 0, maxSize: 0
+                            minSize: 0, maxSize: 1000
                         },
                     }
             }
@@ -97,7 +97,7 @@ const filterRamps = (features: any, areaSize: AreaSize, material: string, mapBou
             long: feature.geometry.coordinates[0][0][0][0],
             lat: feature.geometry.coordinates[0][0][0][1]
         }
-        if (areaSize.maxSize > 0 && areaSize.minSize > 0 && !isAreaSize(feature, areaSize)) {
+        if (!isAreaSize(feature, areaSize)) {
             return false
         }
 
