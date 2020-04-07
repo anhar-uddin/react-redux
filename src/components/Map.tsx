@@ -27,6 +27,8 @@ const Map: React.FC<Props> = props => {
 
 
     const initMap = () => {
+        console.log('initMap');
+        
         let initCenter = { lat: props.data[0].geometry.coordinates[0][0][0][1], lng: props.data[0].geometry.coordinates[0][0][0][0] };
         let newMap = new google.maps.Map(document.getElementById('map'), {
             center: initCenter,
@@ -41,16 +43,19 @@ const Map: React.FC<Props> = props => {
             mapTypeId: 'roadmap',
         });
 
-        newMap.addListener('center_changed', () => {
+        newMap.addListener('center_changed', () => {     
+            console.log('newMap', newMap.getBounds());
+                   
             let bounds = {
-                NE: { long: newMap.getBounds().Ua.j, lat: newMap.getBounds().Za.j }, SW: { long: newMap.getBounds().Ua.i, lat: newMap.getBounds().Za.i }
+                NE: { long: newMap.getBounds().Ua.j, lat: newMap.getBounds().Ya.j }, SW: { long: newMap.getBounds().Ua.i, lat: newMap.getBounds().Ya.i }
             }            
             dispatch(getDataWithinBounds(bounds))
         });
 
         newMap.addListener('zoom_changed', () => {
+            console.log('newMap', newMap.getBounds());
             let bounds = {
-                NE: { long: newMap.getBounds().Ua.j, lat: newMap.getBounds().Za.j }, SW: { long: newMap.getBounds().Ua.i, lat: newMap.getBounds().Za.i }
+                NE: { long: newMap.getBounds().Ua.j, lat: newMap.getBounds().Ya.j }, SW: { long: newMap.getBounds().Ua.i, lat: newMap.getBounds().Ya.i }
             }
             dispatch(getDataWithinBounds(bounds))
 
@@ -84,7 +89,7 @@ const Map: React.FC<Props> = props => {
 
     const removeAllAreas = () => {
         subAreas.forEach((subArea: any) => {
-            subArea.setMap(null)
+            // subArea.setMap(null)
         });
     }
 
