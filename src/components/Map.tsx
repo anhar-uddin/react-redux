@@ -27,8 +27,6 @@ const Map: React.FC<Props> = props => {
 
 
     const initMap = () => {
-        console.log('initMap');
-        
         let initCenter = { lat: props.data[0].geometry.coordinates[0][0][0][1], lng: props.data[0].geometry.coordinates[0][0][0][0] };
         let newMap = new google.maps.Map(document.getElementById('map'), {
             center: initCenter,
@@ -43,19 +41,24 @@ const Map: React.FC<Props> = props => {
             mapTypeId: 'roadmap',
         });
 
-        newMap.addListener('center_changed', () => {     
-            console.log('newMap', newMap.getBounds());
-                   
+        newMap.addListener('center_changed', () => {
+
+            var boundsa = newMap.getBounds();
+            var southWest = boundsa.getSouthWest();
+            var northEast = boundsa.getNorthEast();
             let bounds = {
-                NE: { long: newMap.getBounds().Ua.j, lat: newMap.getBounds().Ya.j }, SW: { long: newMap.getBounds().Ua.i, lat: newMap.getBounds().Ya.i }
-            }            
+                NE: { long: northEast.lng(), lat: northEast.lat() }, SW: { long: southWest.lng(), lat: southWest.lat() }
+            }
+     
             dispatch(getDataWithinBounds(bounds))
         });
 
         newMap.addListener('zoom_changed', () => {
-            console.log('newMap', newMap.getBounds());
+            var boundsa = newMap.getBounds();
+            var southWest = boundsa.getSouthWest();
+            var northEast = boundsa.getNorthEast();
             let bounds = {
-                NE: { long: newMap.getBounds().Ua.j, lat: newMap.getBounds().Ya.j }, SW: { long: newMap.getBounds().Ua.i, lat: newMap.getBounds().Ya.i }
+                NE: { long: northEast.lng(), lat: northEast.lat() }, SW: { long: southWest.lng(), lat: southWest.lat() }
             }
             dispatch(getDataWithinBounds(bounds))
 
@@ -69,7 +72,7 @@ const Map: React.FC<Props> = props => {
     const renderToMaps = (m: any) => {
         let tempArray: any = [];
         props.data.forEach((feature: any) => {
-    
+
             let sortedCord = sortCords(feature.geometry.coordinates[0]);
             let sub_area = new google.maps.Polygon({
                 paths: sortedCord,
@@ -101,7 +104,7 @@ const Map: React.FC<Props> = props => {
 
     return (
         <>
-                <div className="maps" id="map"></div>
+            <div className="maps" id="map"></div>
 
         </>
     );
