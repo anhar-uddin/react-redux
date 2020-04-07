@@ -92,7 +92,7 @@ const Map: React.FC<Props> = props => {
 
     const removeAllAreas = () => {
         subAreas.forEach((subArea: any) => {
-            // subArea.setMap(null)
+            subArea.setMap(null)
         });
     }
 
